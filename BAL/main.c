@@ -18,20 +18,12 @@ int main(int argc, char **argv){
 	headUser=malloc(sizeof(BAL_user));
 	
 	int sockListen,sockClient;
-	struct hostent *hp;
 	struct sockaddr_in adr_distant;
 	struct sockaddr_in adr_local;
     
 	char *msg;
 	msg=malloc(sizeof(char)*MSG_LENGTH);
-	
-	fd_set rfds;
-	 struct timeval tv;
-	 int retval ;
-	tv.tv_sec = 5;
- 	tv.tv_usec = 0;
-
-	
+		
 	sockListen=socket(AF_INET,SOCK_STREAM,0);
 	if(sockListen==-1){
 		printf("Failed creating sockListen");

@@ -19,7 +19,7 @@ clean :
 	rm -f ./include/*.o
 	
 %.o : %.c
-	gcc -c $< -o $@
+	gcc $(CFLAGS) -c $< -o $@
 
 main : $(OBJECTS)
 	gcc $(CFLAGS) $(OBJECTS) -o $(TARGET)
