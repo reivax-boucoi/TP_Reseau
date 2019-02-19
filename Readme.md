@@ -37,7 +37,9 @@ Repo de travail TP_Reseau 3IMACS-AE
 * `make clean` pour nettoyer
 
 ### TODO
-- [ ] Faire le TP
+- [x] Fix inifinite loop when reading client
+- [ ] Use select to allow multiple simultaneous client connections
+- [ ] Make nicer and fewer printfs
 
 ### Issues
-Use select for the BAL server to accest multiple connections
+storeMsg() procedure is moving headUser instead of moving a copy !!
