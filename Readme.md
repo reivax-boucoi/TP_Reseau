@@ -26,20 +26,24 @@ Repo de travail TP_Reseau 3IMACS-AE
 
 ## Seconde partie : *BAL*
 ### Structure
+
  * Programme principal : `main.c`
  * Programme de test : `test.c`
  * Dependances : `include/*`
 
 ### Compilation
+
 * `make` ou `make all` pour compiler le main
 * `make run` pour compiler et executer immediatement le main
 * `make test` pour compiler et executer immediatement le programme de test
 * `make clean` pour nettoyer
 
 ### TODO
+
 - [x] Fix inifinite loop when reading client
 - [ ] Use select to allow multiple simultaneous client connections
 - [ ] Make nicer and fewer printfs
 
 ### Issues
+
 storeMsg() procedure is moving headUser instead of moving a copy !!
