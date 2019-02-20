@@ -28,4 +28,4 @@ test : $(TOBJECTS)
 	echo "Starting Test Program Execution...\r\n\r\n"
 	./$(TARGET)
 	echo "\r\n\r\nEnd Test Program Execution..."
-make clean
+	make clean
