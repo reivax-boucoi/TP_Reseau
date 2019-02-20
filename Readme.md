@@ -21,3 +21,19 @@ Repo de travail TP_Reseau 3IMACS-AE
 		-*v4 non implémentée pour le moment*  
 ***
 ## Seconde partie : *BAL*
+### Structure
+ * Programme principal : `main.c`
+ * Programme de test : `test.c`
+ * Dependances : `include/*`
+
+### Compilation
+* `make` ou `make all` pour compiler le main
+* `make run` pour compiler et executer immediatement le main
+* `make test` pour compiler et executer immediatement le programme de test
+* `make clean` pour nettoyer
+
+### TODO
+- [ ] Faire le TP
+
+### Issues
+We don't have issues here
