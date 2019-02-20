@@ -14,12 +14,12 @@ Repo de travail TP_Reseau 3IMACS-AE
 		- Emission UDP fonctionne
 2. Seance 2  
 	**v2**:  
-		- Emission et reception TCP fonctionne  
+		- Emission et réception TCP fonctionnent  
 	**v3**:  
-		- options n et l gerees  
-		- affichage debut et fin de transmission/reception formate selon le cahier des charges  
+		- options n et l gérées  
+		- affichages de début et fin de transmission/réception formatés selon le cahier des charges  
 	**v4**:  
-		- commence a nettoyer le programme (c'est pas du luxe)  
+		- commencé a nettoyer le programme (c'est pas du luxe)  
 		-*v4 non implémentée pour le moment*  
 		
 ***
