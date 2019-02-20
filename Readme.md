@@ -3,6 +3,8 @@ Repo de travail TP_Reseau 3IMACS-AE
 > DEVEZ Laurent <br>
 > BOURLOT Xavier
 
+***
+
 ## Première partie : *tsock*
 
 1. Seance 1   
@@ -19,7 +21,9 @@ Repo de travail TP_Reseau 3IMACS-AE
 	**v4**:  
 		- commence a nettoyer le programme (c'est pas du luxe)  
 		-*v4 non implémentée pour le moment*  
+		
 ***
+
 ## Seconde partie : *BAL*
 ### Structure
  * Programme principal : `main.c`
