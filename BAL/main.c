@@ -71,15 +71,17 @@ int main(int argc, char **argv){
                 printf("Failed Read\r\n");
                 exit(1);
             }
-            if(l!=0){
+            if(l>5){
                 int id;
                 char *content=malloc((l-5)*sizeof(char));
                 sscanf(msg,"%d%s",&id,content);
                 printf("Reception n°%d (%d) [%s] a destination de %d\r\n",++ind_msg,l,msg,id);
                 storeMsg(headUser,id,content);
+            }else if(l!=0){
+                printf("Received shorter message than expected !\r\n");
             }
         }
-        printf("exited read loop\r\n");
+        printf("Client disconnected\r\n");
         //shutdown
         if(shutdown(sockClient,2)==-1){
             printf("Failed shutdown sockClient\r\n");
