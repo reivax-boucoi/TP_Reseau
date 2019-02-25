@@ -17,10 +17,11 @@ int main(int argc, char **argv){
     
 	headUser=malloc(sizeof(BAL_user));
 	
-	int sockListen;
+	int sockListen,sockClient;
 	struct hostent *hp;
 	struct sockaddr_in adr_distant;
 	struct sockaddr_in adr_local;
+    
 	char *msg;
 	msg=malloc(sizeof(char)*MSG_LENGTH);
 	
@@ -56,34 +57,35 @@ int main(int argc, char **argv){
 	
 	//accept
 	int addrsize=sizeof(adr_distant);
-	int sockClient=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
-	if(sockClient==-1){
-		printf("Failed accept\r\n");
-	}
-	//read
-	int ind_msg=0;
-    int l=1;
-	while(l!=0){
-		l=read(sockClient,msg,MSG_LENGTH);
-		if(l==-1){
-			printf("Failed Read\r\n");
-			exit(1);
-		}
-		//printf("l=%d\r\n",l);
-		if(l!=0){
-			int id;
-			char *content=malloc((l-5)*sizeof(char));
-			sscanf(msg,"%d%s",&id,content);
-			printf("Reception n°%d (%d) [%s] a destination de %d\r\n",++ind_msg,l,msg,id);
-			storeMsg(headUser,id,content);
-		}
-	}
-	printf("exited read loop\r\n");
-	//shutdown
-	if(shutdown(sockClient,2)==-1){
-		printf("Failed shutdown sockClient\r\n");
-		exit(1);
-	}
+    while(1){
+        sockClient=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
+        if(sockClient==-1){
+            printf("Failed accept\r\n");
+        }
+        //read
+        int ind_msg=0;
+        int l=1;
+        while(l!=0){
+            l=read(sockClient,msg,MSG_LENGTH);
+            if(l==-1){
+                printf("Failed Read\r\n");
+                exit(1);
+            }
+            if(l!=0){
+                int id;
+                char *content=malloc((l-5)*sizeof(char));
+                sscanf(msg,"%d%s",&id,content);
+                printf("Reception n°%d (%d) [%s] a destination de %d\r\n",++ind_msg,l,msg,id);
+                storeMsg(headUser,id,content);
+            }
+        }
+        printf("exited read loop\r\n");
+        //shutdown
+        if(shutdown(sockClient,2)==-1){
+            printf("Failed shutdown sockClient\r\n");
+            exit(1);
+        }
+    }
 	//close
 	if(close(sockClient)==-1){
 		printf("failed destructing sockClient\r\n");
