@@ -64,11 +64,12 @@ int main(int argc, char **argv){
 	int ind_msg=0;
     int l=1;
 	while(l!=0){
-		int l=read(sockClient,msg,MSG_LENGTH);
+		l=read(sockClient,msg,MSG_LENGTH);
 		if(l==-1){
 			printf("Failed Read\r\n");
 			exit(1);
 		}
+		//printf("l=%d\r\n",l);
 		if(l!=0){
 			int id;
 			char *content=malloc((l-5)*sizeof(char));
