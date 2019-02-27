@@ -77,6 +77,7 @@ int main(int argc, char **argv){
 			storeMsg(headUser,id,content);
 		}
 	}
+	printf("exited read loop\r\n");
 	//shutdown
 	if(shutdown(sockClient,2)==-1){
 		printf("Failed shutdown sockClient\r\n");
