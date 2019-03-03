@@ -62,7 +62,8 @@ int main(int argc, char **argv){
 	}
 	//read
 	int ind_msg=0;
-	while(1){
+    int l=1;
+	while(l!=0){
 		int l=read(sockClient,msg,MSG_LENGTH);
 		if(l==-1){
 			printf("Failed Read\r\n");
