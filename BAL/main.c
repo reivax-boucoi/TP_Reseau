@@ -14,9 +14,10 @@
 BAL_user *headUser;
 
 int main(int argc, char **argv){
+    
 	headUser=malloc(sizeof(BAL_user));
 	
-	int sock;
+	int sockListen;
 	struct hostent *hp;
 	struct sockaddr_in adr_distant;
 	struct sockaddr_in adr_local;
@@ -30,9 +31,9 @@ int main(int argc, char **argv){
  	tv.tv_usec = 0;
 
 	
-	sock=socket(AF_INET,SOCK_STREAM,0);
-	if(sock==-1){
-		printf("Failed creating socket");
+	sockListen=socket(AF_INET,SOCK_STREAM,0);
+	if(sockListen==-1){
+		printf("Failed creating sockListen");
 		exit(1);
 	}
 	memset((char*)& adr_local,0,sizeof(adr_local));
@@ -41,12 +42,12 @@ int main(int argc, char **argv){
 	adr_local.sin_addr.s_addr=INADDR_ANY;
 	
 	//bind 
-	if (bind(sock,(struct sockaddr*)&adr_local,sizeof(adr_local))==-1){
+	if (bind(sockListen,(struct sockaddr*)&adr_local,sizeof(adr_local))==-1){
 		printf("fail bind\r\n");
 		exit(1);
 	}
 	
-	if(listen(sock,1)==-1){
+	if(listen(sockListen,1)==-1){
 		printf("Failed listen\r\n");
 		exit(1);
 	}
@@ -55,14 +56,14 @@ int main(int argc, char **argv){
 	
 	//accept
 	int addrsize=sizeof(adr_distant);
-	int sock_bis=accept(sock,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
-	if(sock_bis==-1){
+	int sockClient=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
+	if(sockClient==-1){
 		printf("Failed accept\r\n");
 	}
 	//read
 	int ind_msg=0;
 	while(1){
-		int l=read(sock_bis,msg,MSG_LENGTH);
+		int l=read(sockClient,msg,MSG_LENGTH);
 		if(l==-1){
 			printf("Failed Read\r\n");
 			exit(1);
@@ -76,17 +77,17 @@ int main(int argc, char **argv){
 		}
 	}
 	//shutdown
-	if(shutdown(sock_bis,2)==-1){
-		printf("Failed shutdown sock_bis\r\n");
+	if(shutdown(sockClient,2)==-1){
+		printf("Failed shutdown sockClient\r\n");
 		exit(1);
 	}
 	//close
-	if(close(sock_bis)==-1){
-		printf("failed destructing sock_bis\r\n");
+	if(close(sockClient)==-1){
+		printf("failed destructing sockClient\r\n");
 		exit(1);
 	}
 	//destruct socket (commun T/R)
-	if(close(sock)==-1){
+	if(close(sockListen)==-1){
 		printf("failed destructing socket\r\n");
 		exit(1);
 	}
