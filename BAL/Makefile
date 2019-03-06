@@ -1,4 +1,4 @@
-TARGET= a.out
+TARGET= tsock
 OBJECTS=main.o include/BAL.o 
 TOBJECTS=test.o include/Bal.o 
 CFLAGS= -Wall 
