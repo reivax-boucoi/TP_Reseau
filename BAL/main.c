@@ -51,7 +51,7 @@ int main(int argc, char **argv){
 		exit(1);
 	}
 	
-	printf("Server BAL started\r\n");
+	printf("Server BAL started !\r\n");
 	
 	//accept
 	int addrsize=sizeof(adr_distant);
