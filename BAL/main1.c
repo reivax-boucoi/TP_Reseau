@@ -70,7 +70,7 @@ int main(int argc, char **argv){
                         printf("Failed accept\r\n");
                     }
                     FD_SET(sockNew, &masterFD);
-                    
+                    printf("New connection !\r\n");
                 }else{//already connected client
                     
                     int l=read(sockClient,msg,MSG_LENGTH);
