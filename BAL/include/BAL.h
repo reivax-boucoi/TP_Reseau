@@ -20,4 +20,6 @@ struct BAL_user{
 void readUser(BAL_user *user);
 void readMsg(BAL_msg *msg);
 void addMsg(BAL_user *user, char *msg);
+void storeMsg(BAL_user *headUser, int id, char *msg);
+
 #endif
