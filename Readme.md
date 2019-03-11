@@ -40,4 +40,4 @@ Repo de travail TP_Reseau 3IMACS-AE
 - [ ] Faire le TP
 
 ### Issues
-We don't have issues here
+Use select for the BAL server to accest multiple connections
