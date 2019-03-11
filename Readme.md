@@ -46,4 +46,4 @@ Repo de travail TP_Reseau 3IMACS-AE
 
 ### Issues
 
-__storeMsg() procedure is moving headUser instead of moving a copy !!__
+__***storeMsg() procedure is moving headUser instead of moving a copy !!***__
