@@ -17,19 +17,13 @@ int main(int argc, char **argv){
     
 	headUser=malloc(sizeof(BAL_user));
 	
-	int sockListen,sockClient;
-	struct hostent *hp;
+	int sockListen;
 	struct sockaddr_in adr_distant;
 	struct sockaddr_in adr_local;
     
 	char *msg;
 	msg=malloc(sizeof(char)*MSG_LENGTH);
 	
-	fd_set rfds;
-	 struct timeval tv;
-	 int retval ;
-	tv.tv_sec = 5;
- 	tv.tv_usec = 0;
 
 	
 	sockListen=socket(AF_INET,SOCK_STREAM,0);
@@ -55,49 +49,66 @@ int main(int argc, char **argv){
 	
 	printf("Server BAL started !\r\n");
 	
-	//accept
 	int addrsize=sizeof(adr_distant);
+    
+    fd_set masterFD;
+	FD_ZERO(&masterFD);
+    FD_SET(sockListen, &masterFD);
+    
     while(1){
-        sockClient=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
-        if(sockClient==-1){
-            printf("Failed accept\r\n");
-        }
-        //read
-        int ind_msg=0;
-        int l=1;
-        while(l!=0){
-            l=read(sockClient,msg,MSG_LENGTH);
-            if(l==-1){
-                printf("Failed Read\r\n");
-                exit(1);
+        fd_set copyFD = masterFD;
+        
+        int socketCount = select(0,&copyFD,NULL,NULL,NULL);
+        
+        for (int i = 0; i < socketCount; i++){
+            int sockClient= copyFD.fd_array[i];
+            
+            if(sockClient==sockListen){//new connection !
+                int sockNew=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
+                if(sockNew==-1){
+                    printf("Failed accept\r\n");
+                }
+                FD_SET(sockNew, &masterFD);
+                
+            }else{
+                
+                int l=read(sockClient,msg,MSG_LENGTH);
+                
+                if(l==-1){//error
+                    printf("Failed Read\r\n");
+                    exit(1);
+                    
+                }else if(l==0){//close
+                    if(shutdown(sockClient,2)==-1){
+                        printf("Failed shutdown sockClient\r\n");
+                        exit(1);
+                    }
+                    if(close(sockClient)==-1){
+                        printf("failed destructing sockClient\r\n");
+                        exit(1);
+                    }
+					FD_CLR(sockClient, &masterFD);
+                    printf("Client disconnected\r\n");
+                    
+                }else if(l>5){//read
+                    int id;
+                    char *content=malloc((l-5)*sizeof(char));
+                    sscanf(msg,"%d%s",&id,content);
+                    printf("Reception (%d) [%s] a destination de %d\r\n",l,msg,id);
+                    storeMsg(headUser,id,content);
+                    
+                }else{//short
+                    printf("Received shorter message than expected !\r\n");
+                }
             }
-            if(l>5){
-                int id;
-                char *content=malloc((l-5)*sizeof(char));
-                sscanf(msg,"%d%s",&id,content);
-                printf("Reception n°%d (%d) [%s] a destination de %d\r\n",++ind_msg,l,msg,id);
-                storeMsg(headUser,id,content);
-            }else if(l!=0){
-                printf("Received shorter message than expected !\r\n");
-            }
-        }
-        printf("Client disconnected\r\n");
-        //shutdown
-        if(shutdown(sockClient,2)==-1){
-            printf("Failed shutdown sockClient\r\n");
-            exit(1);
         }
     }
-	//close
-	if(close(sockClient)==-1){
-		printf("failed destructing sockClient\r\n");
-		exit(1);
-	}
-	//destruct socket (commun T/R)
+	
 	if(close(sockListen)==-1){
 		printf("failed destructing socket\r\n");
 		exit(1);
 	}
+	FD_CLR(sockListen, &masterFD);
 	
 	printf("Hello world !\r\n");
 	return 0;
