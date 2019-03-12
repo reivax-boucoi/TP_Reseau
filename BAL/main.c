@@ -117,7 +117,7 @@ int main(int argc, char **argv){
 		                    printf("Failed accept\r\n");
 		                }
 		                FD_SET(sockNew, &masterFD);
-		                printf("New connection !\r\n");
+		                printf("PUITS:port=%d\r\n",atoi(argv[argc-1]));
 		            }else{//already connected client
 		                
 		                int l=read(sockClient,msg,MSG_LENGTH);
@@ -136,7 +136,7 @@ int main(int argc, char **argv){
 		                        exit(1);
 		                    }
 		                    FD_CLR(sockClient, &masterFD);
-		                    printf("Client disconnected\r\n");
+		                    printf("PUITS:fin\r\n");
 		                    
 		                }else if(l>5){//read client
 		                    int id;
@@ -203,6 +203,7 @@ int main(int argc, char **argv){
 					}
 					printf("SOURCE : Envoi lettre n°%d à destination du récepteur %d (%d)[%s]\r\n",i+1,BALid,l,msg);
 			}
+			printf("SOURCE : fin\r\n");
 		}else if(mode==CLIENTREADMODE){//clientread part
 			sprintf(msg,"%05d...............",BALid);
 			int l=0;
