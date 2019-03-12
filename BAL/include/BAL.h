@@ -3,6 +3,10 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <sys/socket.h>
+#include <sys/un.h>
+#include <netinet/in.h>
+#include <netdb.h>
 
 typedef struct BAL_msg BAL_msg;
 struct BAL_msg{
@@ -17,9 +21,10 @@ struct BAL_user{
 	struct BAL_user *nextUser;
 };
 
-void readUser(BAL_user *user);
-void readMsg(BAL_msg *msg);
+BAL_user *searchUser(BAL_user *headUser,int id);
+void readUser(BAL_user *headUser,int id,int sock);
+void readMsg(BAL_msg *msg,int sock);
 void addMsg(BAL_user *user, char *msg);
-void storeMsg(BAL_user *headUser, int id, char *msg);
+void storeMsg(BAL_user *headUser,int id, char *msg);
 
 #endif

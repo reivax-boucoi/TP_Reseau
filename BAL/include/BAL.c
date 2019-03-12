@@ -1,19 +1,24 @@
 #include "BAL.h"
 
 
-void readMsg(BAL_msg *msg){
+void readMsg(BAL_msg *msg,int sock){
 	printf("%s\r\n",msg->msg);
+	if(write(sock,msg->msg,sizeof(msg->msg))==-1){
+        printf("failed responding to client\r\n");
+        exit(1);
+    }
 	if(msg->nextMsg != NULL){
-		readMsg(msg->nextMsg);
+		readMsg(msg->nextMsg,sock);
 		free(msg->nextMsg);
 		msg->nextMsg=NULL;
 	}
 }
 
-void readUser(BAL_user *user){
+void readUser(BAL_user *headUser,int id, int sock){
+	BAL_user *user=searchUser(headUser,id);
 	if(user->firstMsg != NULL){
 		printf("clean boite n%d\r\n", user->id);
-		readMsg(user->firstMsg);
+		readMsg(user->firstMsg,sock);
 		free(user->firstMsg);
 		user->firstMsg=NULL;
 	}else{
@@ -35,31 +40,34 @@ void addMsg(BAL_user *user, char *msg){
 	}
 }	
 
-
-void storeMsg(BAL_user *headUser, int id, char *msg){
+BAL_user *searchUser(BAL_user *headUser, int id){
 	//search for user id
 	BAL_user *cur=headUser;
-	if(cur->nextUser!=NULL){
-		cur=headUser->nextUser;
-		int found=0;
-		while(!found && (cur->nextUser != NULL)){
-			if(cur->id == id){
-				found=1;
-			}else{
-				cur=cur->nextUser;
-			}
-		}
-		//if user exists
-		if(found){
-			addMsg(cur, msg);
-			printf("storing msg=%s in existing user n%d\r\n",msg,cur->id); 
+	int found=0;
+	while(!found && (cur->nextUser != NULL)){
+		cur=cur->nextUser;
+		if(cur->id == id){
+			found=1;
 		}
 	}
-	//else create user
-	cur->nextUser=malloc(sizeof(BAL_user));
-	cur->nextUser->id=id;
-	//add msg
-	addMsg(cur->nextUser, msg);
-	printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);
+	return cur;
+}	 
 
+
+void storeMsg(BAL_user *headUser,int id, char *msg){
+
+
+	BAL_user *cur=searchUser(headUser,id);
+	//if user exists
+	if(cur->id==id){
+		addMsg(cur, msg);
+		printf("storing msg=%s in existing user n%d\r\n",msg,cur->id); 
+	}else{
+		//else create user
+		cur->nextUser=malloc(sizeof(BAL_user));
+		cur->nextUser->id=id;
+		//add msg
+		addMsg(cur->nextUser, msg);
+		printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);
+	}
 }

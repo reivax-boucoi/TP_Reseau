@@ -95,8 +95,15 @@ int main(int argc, char **argv){
                         int id;
                         char *content=malloc((l-5)*sizeof(char));
                         sscanf(msg,"%d%s",&id,content);
-                        printf("Reception (%d) [%s] a destination de %d\r\n",l,msg,id);
-                        storeMsg(headUser,id,content);
+                        //if recup             
+                        if(content[0]=='.'){                      
+                        //read user
+                        	readUser(headUser, id, sockClient);                        	
+                        }else{                        
+		                //store
+		                    printf("Reception (%d) [%s] a destination de %d\r\n",l,msg,id);
+		                    storeMsg(headUser,id,content);
+                        }
                         
                     }else{//short
                         printf("Received shorter message than expected !\r\n");
