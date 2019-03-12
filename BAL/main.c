@@ -193,14 +193,15 @@ int main(int argc, char **argv){
 			exit(1);
 		}
 		if (mode==CLIENTPOSTMODE){ //clientpost part
-			for(int i=0;i<nb_message;i++){
+			printf("SOURCE : lg_mesg_emis=%d, port=%d, nb_d'envois=%d, dest=%s\r\n",30,atoi(argv[argc-1]),nb_message,argv[argc-2]);
+			for(int i=0;i<nb_message;i++){			
 					build_msg(msg,BALid,i,MSG_LENGTH);
 					int l=0;
 					l=write(sockListen,msg,MSG_LENGTH);
 					if(l==-1){
 						printf("Error write\r\n");
 					}
-					printf("SOURCE : Envoi n°%d,(%d)[%s]\r\n",i+1,l,msg);
+					printf("SOURCE : Envoi lettre n°%d à destination du récepteur %d (%d)[%s]\r\n",i+1,BALid,l,msg);
 			}
 		}else if(mode==CLIENTREADMODE){//clientread part
 			sprintf(msg,"%05d...............",BALid);
