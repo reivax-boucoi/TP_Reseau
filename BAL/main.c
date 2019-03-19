@@ -369,7 +369,7 @@ int mode=SERVERMODE;
             printf("Reception : Demande recuperation de ses lettres par le récepteur n°%d port=%s, TP=tcp, dest=%s\r\n",BALid,argv[argc-1],argv[argc-2]);
             int ind_msg=0;
             while(l!=0){
-                l=read(sockListen,msg,MSG_MAX_LENGTH);
+                l=read(sockListen,msg,MSG_MAX_LENGTH-5);
                 if(l==-1){
                     printf("Failed Read\r\n");
                     exit(1);
