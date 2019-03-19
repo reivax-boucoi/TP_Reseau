@@ -29,9 +29,9 @@ int main(int argc, char **argv){
     extern char *optarg;
     extern int optind;
     
-/*int mode=SERVERMODE;
+int mode=SERVERMODE;
     int BALid=0;
-    int nb_message = 1;*/
+   //x int nb_message = 1;
     int nb_message = -1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
     int source = -1 ; /* 0=puits, 1=source */
     int tp=0; /* 0 for TCp, 1 for UDP */
@@ -138,7 +138,7 @@ int main(int argc, char **argv){
         if(tp){//UDP
             //envoi
             for(int i=0;i<nb_message;i++){
-                build_msg(msg,i,msg_length);
+                build_msg(msg,i+1,i,msg_length);
                 printf("SOURCE : Envoi n°%d,(30)[%s]\r\n",i+1,msg);
                 if(sendto(sockListen,msg,msg_length,0,(struct sockaddr*)&adr_distant,sizeof(adr_distant))==-1){
                     printf("Error sendto");
@@ -152,7 +152,7 @@ int main(int argc, char **argv){
             }
             //envoi
             for(int i=0;i<nb_message;i++){
-                build_msg(msg,i,msg_length);
+                build_msg(msg,i+1,i,msg_length);
                 int l=0;
                 l=write(sockListen,msg,msg_length);
                 if(l==-1){
