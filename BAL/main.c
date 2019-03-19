@@ -128,7 +128,7 @@ int main(int argc, char **argv){
             exit(1);
         }
         
-        printf("PUITS : port=%s, TP=tcp, \r\n",argv[argc-1]);
+        printf("PUITS : port=%s, TP=tcp\r\n",argv[argc-1]);
         
         int addrsize=sizeof(adr_distant);
         fd_set masterFD;//iniitalize FD
@@ -253,7 +253,7 @@ int main(int argc, char **argv){
                     exit(1);
                 }
                 ind_msg++;
-                if(l>0)printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, MSG_MAX_LENGTH, msg);
+                if(l>0)printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, l, msg);
             }
             if(ind_msg==0){
                 printf("boite déjà vide\r\n");

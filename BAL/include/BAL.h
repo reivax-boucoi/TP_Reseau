@@ -22,6 +22,7 @@ struct BAL_msg{
 typedef struct BAL_user BAL_user;
 struct BAL_user{
 	int id;
+	int nb_msg;
 	struct BAL_msg *firstMsg;
 	struct BAL_user *nextUser;
 };
