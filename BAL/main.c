@@ -13,13 +13,15 @@
 #define SERVERMODE 0
 #define CLIENTPOSTMODE 1
 #define CLIENTREADMODE 2
+#define PUITSMODE 3
+#define SOURCEMODE 4
+
 
 BAL_user *headUser;
 
 void build_msg(char *arr,int id,int index,int length){
     sprintf(arr,"%05d",id);
     for(int i=5;i<length;i++)arr[i]=97+(index%26);
-    
 }
 
 int main(int argc, char **argv){
@@ -27,12 +29,34 @@ int main(int argc, char **argv){
     extern char *optarg;
     extern int optind;
     
-    int mode=SERVERMODE;
+/*int mode=SERVERMODE;
     int BALid=0;
-    int nb_message = 1;
+    int nb_message = 1;*/
+    int nb_message = -1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
+    int source = -1 ; /* 0=puits, 1=source */
+    int tp=0; /* 0 for TCp, 1 for UDP */
+    int msg_length=30;
     
     while ((c = getopt(argc, argv, "e:br:n:")) != -1) {
         switch (c) {
+			case 'p':
+                if (source == 1) {
+                    printf("1usage: cmd [-p|-s][-n ##]\n");
+                    exit(1);
+                }
+                source = 0;
+                mode=PUITSMODE;
+                break;
+
+            case 's':
+                if (source == 0) {
+                    printf("2usage: cmd [-p|-s][-n ##]\n");
+                    exit(1) ;
+                }
+                source = 1;
+                mode=SOURCEMODE;
+                break;
+
             case 'b':
                 mode=SERVERMODE;
                 break;
@@ -45,10 +69,20 @@ int main(int argc, char **argv){
             case 'n':
                 nb_message = atoi(optarg);
                 break;
+
             case 'e':
                 BALid= atoi(optarg);
                 mode=CLIENTPOSTMODE;
                 break;
+
+			case 'u':
+                tp=1;
+                break;
+
+            case 'l':
+                msg_length = atoi(optarg);
+                break;
+
             default:
                 printf("WHATDIDYOUDO!usage: cmd [-p|-s|-b|-r#|-e #][-n ##] [hostName] portName\n");
                 break;
