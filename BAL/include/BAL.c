@@ -22,7 +22,7 @@ void readUser(BAL_user *headUser,int id, int sock){
 		free(user->firstMsg);
 		user->firstMsg=NULL;
 	}else{
-		printf("boite n%d deja vide\r\n", user->id);
+		printf("boite n%d deja vide\r\n",id);
 	}
 }
 
@@ -41,7 +41,6 @@ void addMsg(BAL_user *user, char *msg){
 }	
 
 BAL_user *searchUser(BAL_user *headUser, int id){
-	//search for user id
 	BAL_user *cur=headUser;
 	int found=0;
 	while(!found && (cur->nextUser != NULL)){
@@ -55,8 +54,6 @@ BAL_user *searchUser(BAL_user *headUser, int id){
 
 
 void storeMsg(BAL_user *headUser,int id, char *msg){
-
-
 	BAL_user *cur=searchUser(headUser,id);
 	//if user exists
 	if(cur->id==id){

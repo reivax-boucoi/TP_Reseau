@@ -25,10 +25,10 @@ struct BAL_user{
 	struct BAL_user *nextUser;
 };
 
-BAL_user *searchUser(BAL_user *headUser,int id);
-void readUser(BAL_user *headUser,int id,int sock);
-void readMsg(BAL_msg *msg,int sock);
-void addMsg(BAL_user *user, char *msg);
-void storeMsg(BAL_user *headUser,int id, char *msg);
+BAL_user *searchUser(BAL_user *headUser,int id);	//search for user by id, returns headuser if not found
+void readUser(BAL_user *headUser,int id,int sock);  //empty user's messages into socket'
+void readMsg(BAL_msg *msg,int sock); // recursive read of all the messages from the first downwards
+void addMsg(BAL_user *user, char *msg); //adds a message to a given user
+void storeMsg(BAL_user *headUser,int id, char *msg);    //finds a user (or creates him) and stores his message
 
 #endif
