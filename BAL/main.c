@@ -100,7 +100,7 @@ int main(int argc, char **argv){
 		if (mode<3){
 			nb_message = 1;
 		}else{
-			if (mode==PUITSMODE) nb_message = 10 ; 			
+			if (mode==SOURCEMODE) nb_message = 10 ; 			
 		}
     }
 
