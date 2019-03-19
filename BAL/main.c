@@ -50,7 +50,7 @@ int main(int argc, char **argv){
                 mode=CLIENTPOSTMODE;
                 break;
             default:
-                printf("WHATDIDYOUDO!usage: cmd [-p|-s][-n ##]\n");
+                printf("WHATDIDYOUDO!usage: cmd [-p|-s|-b|-r#|-e #][-n ##] [hostName] portName\n");
                 break;
         }
     }
