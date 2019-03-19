@@ -37,7 +37,7 @@ int main(int argc, char **argv){
     int tp=0; /* 0 for TCp, 1 for UDP */
     int msg_length=30;
     
-    while ((c = getopt(argc, argv, "e:br:n:")) != -1) {
+    while ((c = getopt(argc, argv, "e:br:n:psul")) != -1) {
         switch (c) {
 			case 'p':
                 if (source == 1) {
@@ -89,10 +89,13 @@ int main(int argc, char **argv){
         }
     }
     
-    
-    
-    
-    
+    //force TCP on BALMODE
+    if(((mode==SERVERMODE)||(mode==CLIENTPOSTMODE)||(mode==CLIENTREADMODE))&&(tp==1)){
+        printf("force TCP on BAL\r\n");
+        tp=0;
+    }
+
+
     headUser=malloc(sizeof(BAL_user));
     
     int sockListen;
@@ -103,15 +106,134 @@ int main(int argc, char **argv){
     char *msg;
     msg=malloc(sizeof(char)*MSG_MAX_LENGTH);
     
+    //create socket UDP or TCP
+	if(tp){
+        sockListen=socket(AF_INET,SOCK_DGRAM,0);
+    }else{
+        sockListen=socket(AF_INET,SOCK_STREAM,0);
+    }
+    if(sockListen==-1){
+        printf("Failed creating socket");
+        exit(1);
+    }
     
-    
-    sockListen=socket(AF_INET,SOCK_STREAM,0);
+    //sockListen=socket(AF_INET,SOCK_STREAM,0);
     if(sockListen==-1){
         printf("Failed creating sockListen");
         exit(1);
     }
-    
-    if(mode==SERVERMODE){ //serveur part
+
+	if (mode == SOURCEMODE){//send
+        printf("SOURCE : lg_mesg_emis=%d, port=%s, nb_envois=%d, TP=%s, dest=%s\r\n",msg_length,argv[argc-1],nb_message,tp?"udp":"tcp",argv[argc-2]);
+        //construct° addr
+        memset((char*)& adr_distant,0,sizeof(adr_distant));
+        adr_distant.sin_family=AF_INET;
+        adr_distant.sin_port=htons(atoi(argv[argc-1]));
+
+        if((hp=gethostbyname(argv[argc-2]))==NULL){
+            printf("Failed gethostbyname\r\n");
+            exit(1);
+        }
+        memcpy((char*)&(adr_distant.sin_addr.s_addr),hp->h_addr,hp->h_length);
+        if(tp){//UDP
+            //envoi
+            for(int i=0;i<nb_message;i++){
+                build_msg(msg,i,msg_length);
+                printf("SOURCE : Envoi n°%d,(30)[%s]\r\n",i+1,msg);
+                if(sendto(sockListen,msg,msg_length,0,(struct sockaddr*)&adr_distant,sizeof(adr_distant))==-1){
+                    printf("Error sendto");
+                }
+            }
+        }else{//TCP
+            //connect
+            if(connect(sockListen,(struct sockaddr*)&adr_distant,sizeof(adr_distant))==-1){
+                perror("connect");
+                exit(1);
+            }
+            //envoi
+            for(int i=0;i<nb_message;i++){
+                build_msg(msg,i,msg_length);
+                int l=0;
+                l=write(sockListen,msg,msg_length);
+                if(l==-1){
+                    printf("Error write");
+                }
+                printf("SOURCE : Envoi n°%d,(%d)[%s]\r\n",i+1,l,msg);
+            }
+            //shutdown
+            if(shutdown(sockListen,2)==-1){
+                printf("Failed shutdown socket\r\n");
+                exit(1);
+            }
+        }
+        printf("SOURCE : fin\r\n");
+    }else if (mode == PUITSMODE) {//puits
+        printf("PUITS : lg_mesg_lu=%d, port=%s, nb_receptions=",msg_length,argv[argc-1]);
+        if(nb_message==-1){
+            printf("infini");
+        }else{
+            printf("%d",nb_message);
+        }
+        printf(", TP=%s\r\n",tp?"udp":"tcp");
+        //construct° addr
+        memset((char*)& adr_local,0,sizeof(adr_local));
+        adr_local.sin_family=AF_INET;
+        adr_local.sin_port=htons(atoi(argv[argc-1]));
+        adr_local.sin_addr.s_addr=INADDR_ANY;
+
+        //bind
+        if (bind(sockListen,(struct sockaddr*)&adr_local,sizeof(adr_local))==-1){
+            printf("fail bind\r\n");
+            exit(1);
+        }
+        if(tp){//UDP
+            //receivefrom
+            int ind_msg=0;
+
+            while(ind_msg<nb_message || nb_message==-1){
+                int addrsize=sizeof(adr_distant);
+                int l=0;
+                if ((l=recvfrom(sockListen,msg,msg_length,0,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize))==-1){
+                    printf("Failed receive\r\n");
+                    exit(1);
+                }
+                if(l!=0)printf("PUITS: Reception n°%d (%d) [%s]\r\n",++ind_msg,l,msg);
+            }
+        }else{//TCP
+            //listen
+            if(listen(sockListen,1)==-1){
+                printf("Failed listen\r\n");
+                exit(1);
+            }
+            //accept
+            int addrsize=sizeof(adr_distant);
+            int sock_bis=accept(sockListen,(struct sockaddr*)&adr_distant,(socklen_t*)&addrsize);
+            if(sock_bis==-1){
+                printf("Failed accept\r\n");
+            }
+            //read
+            int ind_msg=0;
+            while(ind_msg<nb_message || nb_message==-1){
+                int l=read(sock_bis,msg,msg_length);
+                if(l==-1){
+                    printf("Failed Read\r\n");
+                    exit(1);
+                }
+                if(l!=0)printf("PUITS: Reception n°%d (%d) [%s]\r\n",++ind_msg,l,msg);
+            }
+            //shutdown
+            if(shutdown(sock_bis,2)==-1){
+                printf("Failed shutdown sock_bis\r\n");
+                exit(1);
+            }
+            //close
+            if(close(sock_bis)==-1){
+                printf("failed destructing sock_bis\r\n");
+                exit(1);
+            }
+        }
+        printf("PUITS : fin\r\n");
+    }else if(mode==SERVERMODE){ //serveur part
         memset((char*)& adr_local,0,sizeof(adr_local));
         adr_local.sin_family=AF_INET;
         adr_local.sin_port=htons(atoi(argv[argc-1]));
