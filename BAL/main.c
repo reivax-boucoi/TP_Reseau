@@ -376,9 +376,9 @@ int mode=SERVERMODE;
                     exit(1);
                 }
                 if(l>0){
-                printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, l, msg);
+                	ind_msg++;
+                	printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, l, msg);
                 }
-                ind_msg++;
             }
             if(ind_msg==0){
                 printf("boite déjà vide\r\n");
