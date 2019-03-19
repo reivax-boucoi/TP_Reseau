@@ -21,7 +21,6 @@ void readUser(BAL_user *headUser,int id, int sock){
 		readMsg(user->firstMsg,sock);
 		free(user->firstMsg);
 		user->firstMsg=NULL;
-		user->nb_msg=0;
 	}else{
 		printf("boite n%d deja vide\r\n",id);
 	}
