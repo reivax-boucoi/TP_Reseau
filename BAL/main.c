@@ -374,8 +374,10 @@ int mode=SERVERMODE;
                     printf("Failed Read\r\n");
                     exit(1);
                 }
+                if(l>0){
+                printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, l, msg);
+                }
                 ind_msg++;
-                if(l>0)printf("RECEPTION: Récupération lettre n°%d par le récepteur  n°%d (%d) [%s]\r\n",ind_msg,BALid, l, msg);
             }
             if(ind_msg==0){
                 printf("boite déjà vide\r\n");
