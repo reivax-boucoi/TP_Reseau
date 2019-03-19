@@ -161,7 +161,7 @@ int main(int argc, char **argv){
                             }else{
                                 //store
                                 printf("PUITS : Réception et stockage lettre pour le recepteur n°%d[%s]\r\n",id,msg); //missing num letter
-                                storeMsg(headUser,id,content);
+                                storeMsg(headUser,id,content,l-5);
                             }
                             
                         }else{//short

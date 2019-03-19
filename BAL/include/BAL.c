@@ -3,7 +3,7 @@
 
 void readMsg(BAL_msg *msg,int sock){
 	printf("%s\r\n",msg->msg);
-	if(write(sock,msg->msg,25*sizeof(char))==-1){//TODO fix this ugly 25
+	if(write(sock,msg->msg,msg->len)==-1){
         printf("failed responding to client\r\n");
         exit(1);
     }
@@ -26,7 +26,7 @@ void readUser(BAL_user *headUser,int id, int sock){
 	}
 }
 
-void addMsg(BAL_user *user, char *msg){
+void addMsg(BAL_user *user, char *msg, int len){
 	if(user->firstMsg != NULL){
 		BAL_msg *cur = user->firstMsg;
 		while(cur->nextMsg != NULL){
@@ -34,9 +34,11 @@ void addMsg(BAL_user *user, char *msg){
 		}
 		cur->nextMsg = malloc(sizeof(BAL_msg));
 		cur->nextMsg->msg=msg;
+        cur->nextMsg->len=len;
 	}else{
 		user->firstMsg = malloc(sizeof(BAL_msg));
 		user->firstMsg->msg = msg;
+        user->firstMsg->len=len;
 	}
 }	
 
@@ -53,18 +55,18 @@ BAL_user *searchUser(BAL_user *headUser, int id){
 }	 
 
 
-void storeMsg(BAL_user *headUser,int id, char *msg){
+void storeMsg(BAL_user *headUser,int id, char *msg, int len){
 	BAL_user *cur=searchUser(headUser,id);
 	//if user exists
 	if(cur->id==id){
-		addMsg(cur, msg);
+		addMsg(cur, msg,len);
 		printf("storing msg=%s in existing user n%d\r\n",msg,cur->id); 
 	}else{
 		//else create user
 		cur->nextUser=malloc(sizeof(BAL_user));
 		cur->nextUser->id=id;
 		//add msg
-		addMsg(cur->nextUser, msg);
+		addMsg(cur->nextUser, msg, len);
 		printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);
 	}
 }
