@@ -1,7 +1,6 @@
 #include "BAL.h"
 
-
-void readMsg(BAL_msg *msg,int sock){
+void readMsg(BAL_msg *msg,int sock){ // recursive read of all the messages from the first downwards
 	printf("%s, l=%d\r\n",msg->msg,msg->len);
 	if(write(sock,msg->msg,msg->len)==-1){
         printf("failed responding to client\r\n");
