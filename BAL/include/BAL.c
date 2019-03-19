@@ -3,7 +3,7 @@
 
 void readMsg(BAL_msg *msg,int sock){
 	printf("%s\r\n",msg->msg);
-	if(write(sock,msg->msg,25*sizeof(char))==-1){
+	if(write(sock,msg->msg,25*sizeof(char))==-1){//TODO fix this ugly 25
         printf("failed responding to client\r\n");
         exit(1);
     }
