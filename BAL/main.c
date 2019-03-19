@@ -97,6 +97,13 @@ int mode=SERVERMODE;
         tp=0;
     }
 
+	if (nb_message == -1) {
+		if (mode<3){
+			nb_message = 1;
+		}else{
+			if (mode==PUITSMODE) nb_message = 10 ; 			
+		}
+    }
 
     headUser=malloc(sizeof(BAL_user));
     
@@ -299,6 +306,7 @@ int mode=SERVERMODE;
                         }else if(l>5){//read client
                             int id;
                             char *content=malloc((l-5)*sizeof(char));
+							//char *cl=malloc(5*sizeof(char));
                             sscanf(msg,"%d%s",&id,content);
                             //if recup
                             if(content[0]=='.'){
