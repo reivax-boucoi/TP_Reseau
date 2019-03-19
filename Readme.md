@@ -35,15 +35,18 @@ Repo de travail TP_Reseau 3IMACS-AE
 
 * `make` ou `make all` pour compiler le main
 * `make run` pour compiler et executer immediatement le main
-* `make test` pour compiler et executer immediatement le programme de test
 * `make clean` pour nettoyer
 
 ### TODO
 
 - [x] Fix inifinite loop when reading client
-- [ ] Use select to allow multiple simultaneous client connections
-- [ ] Make nicer and fewer printfs
+- [x] Use select to allow multiple simultaneous client connections
+- [x] Make nicer and fewer printfs
+- [ ] Comments !
+- [ ] Adjustable message length *(bonus)*
+
 
 ### Issues
 
-__***storeMsg() procedure is moving headUser instead of moving a copy !!***__
+~~storeMsg() procedure is moving headUser instead of moving a copy !!~~
+~~reading letters from any user always returns user0 letters~~
