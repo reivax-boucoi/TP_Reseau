@@ -9,7 +9,9 @@
 #include <netdb.h>
 #include <errno.h>
 #include "include/BAL.h"
+
 #define MSG_MAX_LENGTH 30
+
 #define SERVERMODE 0
 #define CLIENTPOSTMODE 1
 #define CLIENTREADMODE 2
@@ -17,11 +19,10 @@
 #define SOURCEMODE 4
 
 
-BAL_user *headUser;
+BAL_user *headUser;//head of the users chained list
 
-void build_msg(char *arr,int id,int index,int length){
+void build_msg(char *arr,int id,int index,int length){//returns a dumb message with index at start
     sprintf(arr,"%05d",id);
-	//for (int i=0;i<6;i++)if(arr[i]=='0')arr[i]='-';
     for(int i=5;i<length;i++)arr[i]=97+(index%26);
 	printf("message : %s", arr);
 }
@@ -31,12 +32,11 @@ int main(int argc, char **argv){
     extern char *optarg;
     extern int optind;
     
-int mode=SERVERMODE;
-    int BALid=0;
-   //x int nb_message = 1;
-    int nb_message = -1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
+	int mode=SERVERMODE;
+    int BALid=0; // userID of sender or receiver
+    int nb_message = 1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
     int source = -1 ; /* 0=puits, 1=source */
-    int tp=0; /* 0 for TCp, 1 for UDP */
+    int tp=0; /* 0 for TCP, 1 for UDP */
     int msg_length=30;
     
     while ((c = getopt(argc, argv, "e:br:n:psul")) != -1) {
@@ -92,7 +92,7 @@ int mode=SERVERMODE;
     }
     
     //force TCP on BALMODE
-    if(((mode==SERVERMODE)||(mode==CLIENTPOSTMODE)||(mode==CLIENTREADMODE))&&(tp==1)){
+    if((mode<3)&&(tp==1)){
         printf("force TCP on BAL\r\n");
         tp=0;
     }
