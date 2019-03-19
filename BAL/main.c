@@ -21,6 +21,7 @@ BAL_user *headUser;
 
 void build_msg(char *arr,int id,int index,int length){
     sprintf(arr,"%05d",id);
+	for (int i=0;i<6;i++)if(arr[i]=='0')arr[i]='-';
     for(int i=5;i<length;i++)arr[i]=97+(index%26);
 }
 
