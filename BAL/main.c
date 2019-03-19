@@ -1,4 +1,4 @@
-nclude <stdio.h>
+#include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
 #include <sys/time.h>
@@ -83,7 +83,7 @@ int main(int argc, char **argv){
         adr_local.sin_port=htons(atoi(argv[argc-1]));
         adr_local.sin_addr.s_addr=INADDR_ANY;
         
-        bind
+        //bind
         if (bind(sockListen,(struct sockaddr*)&adr_local,sizeof(adr_local))==-1){
             printf("fail bind\r\n");
             exit(1);
@@ -94,7 +94,7 @@ int main(int argc, char **argv){
             exit(1);
         }
         
-        printf("PUITS : port=%d, TP=tcp, \r\n",argv[argc-1]);
+        printf("PUITS : port=%s, TP=tcp, \r\n",argv[argc-1]);
         
         int addrsize=sizeof(adr_distant);
         fd_set masterFD;//iniitalize FD
@@ -120,7 +120,7 @@ int main(int argc, char **argv){
                         printf("New connection !\r\n");
                     }else{//already connected client
                         
-                        int l=read(sockClient,msg,MSG_LENGTH);
+                        int l=read(sockClient,msg,MSG_MAX_LENGTH);
                         
                         if(l==-1){//error
                             printf("Failed Read\r\n");
@@ -160,7 +160,7 @@ int main(int argc, char **argv){
                                 printf("Client recup disconnected\r\n");
                             }else{
                                 //store
-                                printf("PUITS : Réception et stockage lettre n°%d pour le recepteur n°%d[%s]\r\n",idletter,id,msg); //missing num letter
+                                printf("PUITS : Réception et stockage lettre pour le recepteur n°%d[%s]\r\n",id,msg); //missing num letter
                                 storeMsg(headUser,id,content);
                             }
                             
@@ -195,18 +195,18 @@ int main(int argc, char **argv){
         if (mode==CLIENTPOSTMODE){ //clientpost part
             for(int i=0;i<nb_message;i++){
                 printf("SOURCE : lg_mesg_emis=%d, port=%s, nb_d'envois=%d, TP=tcp, dest=%s\r\n",MSG_MAX_LENGTH,argv[argc-1],nb_message,argv[argc-2]); //missing long msg,
-                build_msg(msg,BALid,i,MSG_LENGTH);
+                build_msg(msg,BALid,i,MSG_MAX_LENGTH);
                 int l=0;
-                l=write(sockListen,msg,MSG_LENGTH);
+                l=write(sockListen,msg,MSG_MAX_LENGTH);
                 if(l==-1){
                     printf("Error write\r\n");
                 }
-                printf("SOURCE : Envoi lettre n°%d à destination du récepteur %d (%d)[%s]\r\n",idletter,BALid,MSG_MAX_LENGTH,msg); //missing id letter
+                printf("SOURCE : Envoi lettre n°%d à destination du récepteur %d (%d)[%s]\r\n",i+1,BALid,MSG_MAX_LENGTH,msg);
             }
         }else if(mode==CLIENTREADMODE){//clientread part
             sprintf(msg,"%05d...............",BALid);
             int l=0;
-            l=write(sockListen,msg,MSG_LENGTH);
+            l=write(sockListen,msg,MSG_MAX_LENGTH);
             if(l==-1){
                 printf("Error write\r\n");
             }
