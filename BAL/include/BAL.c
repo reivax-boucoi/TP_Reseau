@@ -59,13 +59,13 @@ void storeMsg(BAL_user *headUser,int id, char *msg, int len){
 	//if user exists
 	if(cur->id==id){
 		addMsg(cur, msg,len);
-		printf("storing msg=%s in existing user n%d\r\n",msg,cur->id); 
+		//printf("storing msg=%s in existing user n%d\r\n",msg,cur->id); 
 	}else{
 		//else create user
 		cur->nextUser=malloc(sizeof(BAL_user));
 		cur->nextUser->id=id;
 		//add msg
 		addMsg(cur->nextUser, msg, len);
-		printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);
+		//printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);
 	}
 }
