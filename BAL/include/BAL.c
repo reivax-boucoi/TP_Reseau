@@ -15,7 +15,7 @@ void readMsg(BAL_msg *msg,int sock){ // recursive read of all the messages from 
 
 void readUser(BAL_user *headUser,int id, int sock){
 	BAL_user *user=searchUser(headUser,id);
-	if(user->firstMsg != NULL){
+	if( user->id ==id && user->firstMsg != NULL){
 		printf("clean boite n%d\r\n", user->id);
 		readMsg(user->firstMsg,sock);
 		free(user->firstMsg);
@@ -23,6 +23,7 @@ void readUser(BAL_user *headUser,int id, int sock){
 	}else{
 		printf("boite n%d deja vide\r\n",id);
 	}
+	
 }
 
 void addMsg(BAL_user *user, char *msg, int len){
@@ -34,6 +35,7 @@ void addMsg(BAL_user *user, char *msg, int len){
 		cur->nextMsg = malloc(sizeof(BAL_msg));
 		cur->nextMsg->msg=msg;
         cur->nextMsg->len=len;
+		
 	}else{
 		user->firstMsg = malloc(sizeof(BAL_msg));
 		user->firstMsg->msg = msg;
@@ -64,6 +66,7 @@ void storeMsg(BAL_user *headUser,int id, char *msg, int len){
 		//else create user
 		cur->nextUser=malloc(sizeof(BAL_user));
 		cur->nextUser->id=id;
+		cur->nextUser->firstMsg=NULL;
 		//add msg
 		addMsg(cur->nextUser, msg, len);
 		//printf("storing msg=%s in new user n%d\r\n",cur->nextUser->firstMsg->msg,cur->nextUser->id);

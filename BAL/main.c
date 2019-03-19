@@ -33,7 +33,7 @@ int main(int argc, char **argv){
     
 	int mode=SERVERMODE;
     int BALid=0; // userID of sender or receiver
-    int nb_message = 1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
+    int nb_message = -1; /* Nb de messages à envoyer ou à recevoir, par défaut : 10 en émission, infini en réception */
     int source = -1 ; /* 0=puits, 1=source */
     int tp=0; /* 0 for TCP, 1 for UDP */
     int msg_length=30;
