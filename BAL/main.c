@@ -24,7 +24,6 @@ BAL_user *headUser;//head of the users chained list
 void build_msg(char *arr,int id,int index,int length){//returns a dumb message with index at start
     sprintf(arr,"%05d",id);
     for(int i=5;i<length;i++)arr[i]=97+(index%26);
-	printf("message : %s", arr);
 }
 
 int main(int argc, char **argv){
@@ -359,8 +358,8 @@ int main(int argc, char **argv){
             exit(1);
         }
         if (mode==CLIENTPOSTMODE){ //clientpost part
+			printf("SOURCE : lg_mesg_emis=%d, port=%s, nb_d'envois=%d, TP=tcp, dest=%s\r\n",MSG_MAX_LENGTH,argv[argc-1],nb_message,argv[argc-2]); 
             for(int i=0;i<nb_message;i++){
-                printf("SOURCE : lg_mesg_emis=%d, port=%s, nb_d'envois=%d, TP=tcp, dest=%s\r\n",MSG_MAX_LENGTH,argv[argc-1],nb_message,argv[argc-2]); //missing long msg,
                 build_msg(msg,BALid,i,MSG_MAX_LENGTH);
                 int l=0;
                 l=write(sockListen,msg,MSG_MAX_LENGTH);
