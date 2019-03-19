@@ -47,6 +47,7 @@ Repo de travail TP_Reseau 3IMACS-AE
 
 
 ### Issues
+*Potential issue* Should we delete users after their mail was read ?
 
 ~~storeMsg() procedure is moving headUser instead of moving a copy !!~~
 ~~reading letters from any user always returns user0 letters~~
