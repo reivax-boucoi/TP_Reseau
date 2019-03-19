@@ -2,7 +2,7 @@
 
 
 void readMsg(BAL_msg *msg,int sock){
-	printf("%s\r\n",msg->msg);
+	printf("%s, l=%d\r\n",msg->msg,msg->len);
 	if(write(sock,msg->msg,msg->len)==-1){
         printf("failed responding to client\r\n");
         exit(1);
