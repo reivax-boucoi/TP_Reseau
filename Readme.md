@@ -19,7 +19,7 @@ Repo de travail TP_Reseau 3IMACS-AE
 		- options n et l gérées  
 		- affichages de début et fin de transmission/réception formatés selon le cahier des charges  
 	**v4**:  
-		- commencé a nettoyer le programme (c'est pas du luxe)  
+		- commencé a nettoyer le programme  
 		-*v4 non implémentée pour le moment*  
 		
 ***
@@ -47,7 +47,7 @@ Repo de travail TP_Reseau 3IMACS-AE
 
 
 ### Issues
-*Potential issue* Should we delete users after their mail was read ?  
+*(Potential issue)* Should we delete users after their mail was read ?  
 
 ~~storeMsg() procedure is moving headUser instead of moving a copy !!~~  
 ~~reading letters from any user always returns user0 letters~~  
